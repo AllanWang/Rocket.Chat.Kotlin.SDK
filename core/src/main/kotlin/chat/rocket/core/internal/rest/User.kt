@@ -6,23 +6,14 @@ import chat.rocket.common.model.RoomType
 import chat.rocket.common.model.User
 import chat.rocket.common.util.CalendarISO8601Converter
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.internal.RestMultiResult
 import chat.rocket.core.internal.RestResult
-import chat.rocket.core.internal.model.Subscription
-import chat.rocket.core.internal.model.UserPayload
-import chat.rocket.core.internal.model.UserPayloadData
-import chat.rocket.core.internal.model.OwnBasicInformationPayload
-import chat.rocket.core.internal.model.OwnBasicInformationPayloadData
-import chat.rocket.core.internal.model.PasswordPayload
-import chat.rocket.core.model.ChatRoom
-import chat.rocket.core.model.Myself
-import chat.rocket.core.model.Removed
-import chat.rocket.core.model.UserRole
-import chat.rocket.core.model.Room
+import chat.rocket.core.internal.async
+import chat.rocket.core.internal.model.*
+import chat.rocket.core.model.*
 import com.squareup.moshi.Types
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -90,7 +81,7 @@ suspend fun RocketChatClient.updateOwnBasicInformation(
     name: String? = null
 ): User {
     val payload =
-        OwnBasicInformationPayload(OwnBasicInformationPayloadData(email, currentPassword, newPassword, username, name))
+            OwnBasicInformationPayload(OwnBasicInformationPayloadData(email, currentPassword, newPassword, username, name))
     val adapter = moshi.adapter(OwnBasicInformationPayload::class.java)
 
     val payloadBody = adapter.toJson(payload)
@@ -161,12 +152,12 @@ suspend fun RocketChatClient.setAvatar(
     }
 
     val body = MultipartBody.Builder()
-        .setType(MultipartBody.FORM)
-        .addFormDataPart(
-            "image", fileName,
-            InputStreamRequestBody(MediaType.parse(mimeType), inputStreamProvider)
-        )
-        .build()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                    "image", fileName,
+                    InputStreamRequestBody(MediaType.parse(mimeType), inputStreamProvider)
+            )
+            .build()
 
     val httpUrl = requestUrl(restUrl, "users.setAvatar").build()
     val request = requestBuilderForAuthenticatedMethods(httpUrl).post(body).build()
@@ -298,9 +289,9 @@ internal suspend fun RocketChatClient.listSubscriptions(timestamp: Long? = null)
     val request = requestBuilderForAuthenticatedMethods(urlBuilder.build()).get().build()
 
     val type = Types.newParameterizedType(
-        RestMultiResult::class.java,
-        Types.newParameterizedType(List::class.java, Subscription::class.java),
-        Types.newParameterizedType(List::class.java, Removed::class.java)
+            RestMultiResult::class.java,
+            Types.newParameterizedType(List::class.java, Subscription::class.java),
+            Types.newParameterizedType(List::class.java, Removed::class.java)
     )
 
     val response = handleRestCall<RestMultiResult<List<Subscription>, List<Removed>>>(request, type)
@@ -328,9 +319,9 @@ internal suspend fun RocketChatClient.listRooms(timestamp: Long? = null): RestMu
     val request = requestBuilderForAuthenticatedMethods(urlBuilder.build()).get().build()
 
     val type = Types.newParameterizedType(
-        RestMultiResult::class.java,
-        Types.newParameterizedType(List::class.java, Room::class.java),
-        Types.newParameterizedType(List::class.java, Removed::class.java)
+            RestMultiResult::class.java,
+            Types.newParameterizedType(List::class.java, Room::class.java),
+            Types.newParameterizedType(List::class.java, Removed::class.java)
     )
     return handleRestCall(request, type)
 }

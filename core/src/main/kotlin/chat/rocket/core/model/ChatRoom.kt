@@ -5,12 +5,13 @@ import chat.rocket.common.model.RoomType
 import chat.rocket.common.model.SimpleUser
 import chat.rocket.common.model.UserStatus
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.internal.model.Subscription
 import chat.rocket.core.internal.realtime.subscribeRoomMessages
 import chat.rocket.core.internal.rest.history
 import chat.rocket.core.internal.rest.messages
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
+
+import kotlinx.coroutines.withContext
 
 data class ChatRoom(
     override val id: String,

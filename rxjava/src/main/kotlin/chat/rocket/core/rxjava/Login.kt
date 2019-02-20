@@ -6,7 +6,7 @@ import chat.rocket.core.RocketChatClient
 import chat.rocket.core.internal.rest.login
 import chat.rocket.core.internal.rest.signup
 import io.reactivex.Single
-import kotlinx.coroutines.experimental.rx2.rxSingle
+import kotlinx.coroutines.rx2.rxSingle
 
 /**
  * Login with username and password. On success this will also call [chat.rocket.core.TokenRepository].save(token)

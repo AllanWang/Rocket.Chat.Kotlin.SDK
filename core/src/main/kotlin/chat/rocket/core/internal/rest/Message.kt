@@ -3,6 +3,7 @@ package chat.rocket.core.internal.rest
 import chat.rocket.common.model.BaseResult
 import chat.rocket.common.model.RoomType
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.internal.RestResult
 import chat.rocket.core.internal.model.DeletePayload
 import chat.rocket.core.internal.model.MessageReportPayload
@@ -16,8 +17,8 @@ import chat.rocket.core.model.PagedResult
 import chat.rocket.core.model.ReadReceipt
 import chat.rocket.core.model.attachment.Attachment
 import com.squareup.moshi.Types
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
+
+import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.MultipartBody

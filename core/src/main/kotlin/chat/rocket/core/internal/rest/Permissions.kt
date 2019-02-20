@@ -1,10 +1,11 @@
 package chat.rocket.core.internal.rest
 
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.model.Permission
 import com.squareup.moshi.Types
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
+
+import kotlinx.coroutines.withContext
 
 /**
  * Request all permissions associated to each role at current server.

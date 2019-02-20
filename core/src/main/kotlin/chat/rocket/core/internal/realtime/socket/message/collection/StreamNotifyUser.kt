@@ -1,11 +1,12 @@
 package chat.rocket.core.internal.realtime.socket.message.collection
 
+import chat.rocket.core.internal.launch
 import chat.rocket.core.internal.model.Subscription
 import chat.rocket.core.internal.realtime.socket.Socket
 import chat.rocket.core.internal.realtime.socket.model.StreamMessage
 import chat.rocket.core.internal.realtime.socket.model.Type
 import chat.rocket.core.model.Room
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.security.InvalidParameterException
 

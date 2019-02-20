@@ -23,12 +23,9 @@ import chat.rocket.core.model.messages
 import chat.rocket.core.rxjava.me
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -65,7 +62,7 @@ fun main(args: Array<String>) {
     }
 
     // using coroutines
-    val job = launch(CommonPool) {
+    val job = GlobalScope.launch(Dispatchers.Default) {
 
         val token = client.login("luciofm-testing", "vpnfe5lnv!")
         logger.debug("Token: userId = ${token.userId} - authToken = ${token.authToken}")

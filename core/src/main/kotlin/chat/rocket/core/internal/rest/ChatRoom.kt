@@ -4,6 +4,7 @@ import chat.rocket.common.model.BaseResult
 import chat.rocket.common.model.RoomType
 import chat.rocket.common.model.User
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.internal.model.ChatRoomAnnouncementPayload
 import chat.rocket.core.internal.model.ChatRoomDescriptionPayload
 import chat.rocket.core.internal.model.ChatRoomJoinCodePayload
@@ -22,8 +23,7 @@ import chat.rocket.core.model.Room
 import chat.rocket.core.model.PagedResult
 import chat.rocket.core.model.attachment.GenericAttachment
 import com.squareup.moshi.Types
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
 
 /**
@@ -102,7 +102,7 @@ suspend fun RocketChatClient.getFavoriteMessages(
     roomType: RoomType,
     offset: Int
 ): PagedResult<List<Message>> = withContext(CommonPool) {
-    val userId = tokenRepository.get(this.url)?.userId
+    val userId = tokenRepository.get(this@getFavoriteMessages.url)?.userId
 
     val httpUrl = requestUrl(restUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
         .addQueryParameter("roomId", roomId)
