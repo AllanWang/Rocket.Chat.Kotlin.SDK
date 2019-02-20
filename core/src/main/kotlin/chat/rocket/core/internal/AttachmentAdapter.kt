@@ -5,13 +5,13 @@ import chat.rocket.common.util.Logger
 import chat.rocket.core.model.attachment.Attachment
 import chat.rocket.core.model.attachment.Color
 import chat.rocket.core.model.attachment.Field
+import chat.rocket.core.model.attachment.actions.Action
+import chat.rocket.core.model.attachment.actions.ButtonAction
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import chat.rocket.core.model.attachment.actions.Action
-import chat.rocket.core.model.attachment.actions.ButtonAction
 import java.lang.reflect.Type
 
 class AttachmentAdapter(moshi: Moshi, private val logger: Logger) : JsonAdapter<Attachment>() {
@@ -143,34 +143,34 @@ class AttachmentAdapter(moshi: Moshi, private val logger: Logger) : JsonAdapter<
         }
 
         return Attachment(
-            title = title,
-            type = type,
-            description = description,
-            authorName = authorName,
-            text = text,
-            thumbUrl = thumbUrl,
-            color = color,
-            titleLink = titleLink,
-            titleLinkDownload = titleLinkDownload,
-            imageUrl = imageUrl,
-            imageType = imageType,
-            imageSize = imageSize,
-            videoUrl = videoUrl,
-            videoType = videoType,
-            videoSize = videoSize,
-            audioUrl = audioUrl,
-            audioType = audioType,
-            audioSize = audioSize,
-            messageLink = messageLink,
-            attachments = attachments,
-            timestamp = timestamp,
-            authorIcon = authorIcon,
-            authorLink = authorLink,
-            imagePreview = imagePreview,
-            fields = fields,
-            fallback = fallback,
-            buttonAlignment = buttonAlignment,
-            actions = actions
+                title = title,
+                type = type,
+                description = description,
+                authorName = authorName,
+                text = text,
+                thumbUrl = thumbUrl,
+                color = color,
+                titleLink = titleLink,
+                titleLinkDownload = titleLinkDownload,
+                imageUrl = imageUrl,
+                imageType = imageType,
+                imageSize = imageSize,
+                videoUrl = videoUrl,
+                videoType = videoType,
+                videoSize = videoSize,
+                audioUrl = audioUrl,
+                audioType = audioType,
+                audioSize = audioSize,
+                messageLink = messageLink,
+                attachments = attachments,
+                timestamp = timestamp,
+                authorIcon = authorIcon,
+                authorLink = authorLink,
+                imagePreview = imagePreview,
+                fields = fields,
+                fallback = fallback,
+                buttonAlignment = buttonAlignment,
+                actions = actions
         )
     }
 

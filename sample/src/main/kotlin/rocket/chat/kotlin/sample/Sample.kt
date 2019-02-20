@@ -4,15 +4,17 @@ import chat.rocket.common.RocketChatException
 import chat.rocket.common.model.RoomType
 import chat.rocket.common.model.ServerInfo
 import chat.rocket.common.model.Token
-import chat.rocket.common.model.UserStatus
 import chat.rocket.common.util.PlatformLogger
 import chat.rocket.core.RocketChatClient
 import chat.rocket.core.TokenRepository
 import chat.rocket.core.compat.Callback
 import chat.rocket.core.compat.serverInfo
-import chat.rocket.core.internal.realtime.*
-import chat.rocket.core.internal.realtime.socket.model.State
+import chat.rocket.core.internal.CommonPool
+import chat.rocket.core.internal.launch
 import chat.rocket.core.internal.realtime.socket.connect
+import chat.rocket.core.internal.realtime.socket.model.State
+import chat.rocket.core.internal.realtime.subscribeRooms
+import chat.rocket.core.internal.realtime.subscribeSubscriptions
 import chat.rocket.core.internal.rest.chatRooms
 import chat.rocket.core.internal.rest.getFavoriteMessages
 import chat.rocket.core.internal.rest.getFiles
@@ -23,12 +25,9 @@ import chat.rocket.core.model.messages
 import chat.rocket.core.rxjava.me
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -51,10 +50,10 @@ fun main(args: Array<String>) {
     val interceptor = HttpLoggingInterceptor()
     interceptor.level = HttpLoggingInterceptor.Level.BODY
     val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(interceptor)
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .readTimeout(15, TimeUnit.SECONDS)
-        .build()
+            .addInterceptor(interceptor)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .build()
 
     val client = RocketChatClient.create {
         httpClient = okHttpClient
@@ -123,7 +122,7 @@ fun main(args: Array<String>) {
         }
 
         launch {
-//            delay(10000)
+            //            delay(10000)
 //            client.setTemporaryStatus(UserStatus.Online())
 //            delay(2000)
 //            client.setDefaultStatus(UserStatus.Away())
@@ -190,13 +189,13 @@ fun getMeInfoByRx(client: RocketChatClient) {
 }
 
 suspend fun showFavoriteMessage(client: RocketChatClient) {
-        val result = client.getFavoriteMessages("GENERAL", RoomType.Channel(), 0)
-        println("favoriteMessages: $result")
+    val result = client.getFavoriteMessages("GENERAL", RoomType.Channel(), 0)
+    println("favoriteMessages: $result")
 }
 
 suspend fun showFileList(client: RocketChatClient) {
-        val result = client.getFiles("GENERAL", RoomType.Channel(), 0)
-        println("Attachment from the File List: $result")
+    val result = client.getFiles("GENERAL", RoomType.Channel(), 0)
+    println("Attachment from the File List: $result")
 }
 
 class SimpleTokenRepository : TokenRepository {

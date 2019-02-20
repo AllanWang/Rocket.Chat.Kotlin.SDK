@@ -5,12 +5,13 @@ import chat.rocket.common.model.RoomType
 import chat.rocket.common.model.SimpleUser
 import chat.rocket.common.model.UserStatus
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.internal.model.Subscription
 import chat.rocket.core.internal.realtime.subscribeRoomMessages
 import chat.rocket.core.internal.rest.history
 import chat.rocket.core.internal.rest.messages
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
+
+import kotlinx.coroutines.withContext
 
 data class ChatRoom(
     override val id: String,
@@ -45,32 +46,32 @@ data class ChatRoom(
     companion object {
         fun create(room: Room, subscription: Subscription, client: RocketChatClient): ChatRoom {
             return ChatRoom(id = room.id,
-                subscriptionId = subscription.id,
-                type = room.type,
-                user = room.user ?: subscription.user,
-                status = null,
-                name = room.name ?: subscription.name!!, // we guarantee on listSubscriptions() that it has a name
-                fullName = room.fullName ?: subscription.fullName,
-                readonly = room.readonly,
-                updatedAt = room.updatedAt ?: subscription.updatedAt,
-                timestamp = subscription.timestamp,
-                lastSeen = subscription.lastSeen,
-                topic = room.topic,
-                description = room.description,
-                announcement = room.announcement,
-                default = subscription.isDefault,
-                favorite = subscription.isFavorite,
-                open = subscription.open,
-                alert = subscription.alert,
-                unread = subscription.unread,
-                roles = subscription.roles,
-                archived = subscription.archived,
-                userMentions = subscription.userMentions,
-                groupMentions = subscription.groupMentions,
-                lastMessage = room.lastMessage,
-                client = client,
-                broadcast = room.broadcast,
-                muted = room.muted
+                    subscriptionId = subscription.id,
+                    type = room.type,
+                    user = room.user ?: subscription.user,
+                    status = null,
+                    name = room.name ?: subscription.name!!, // we guarantee on listSubscriptions() that it has a name
+                    fullName = room.fullName ?: subscription.fullName,
+                    readonly = room.readonly,
+                    updatedAt = room.updatedAt ?: subscription.updatedAt,
+                    timestamp = subscription.timestamp,
+                    lastSeen = subscription.lastSeen,
+                    topic = room.topic,
+                    description = room.description,
+                    announcement = room.announcement,
+                    default = subscription.isDefault,
+                    favorite = subscription.isFavorite,
+                    open = subscription.open,
+                    alert = subscription.alert,
+                    unread = subscription.unread,
+                    roles = subscription.roles,
+                    archived = subscription.archived,
+                    userMentions = subscription.userMentions,
+                    groupMentions = subscription.groupMentions,
+                    lastMessage = room.lastMessage,
+                    client = client,
+                    broadcast = room.broadcast,
+                    muted = room.muted
             )
         }
     }

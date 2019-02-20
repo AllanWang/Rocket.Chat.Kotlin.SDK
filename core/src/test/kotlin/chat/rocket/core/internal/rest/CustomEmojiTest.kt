@@ -5,7 +5,7 @@ import chat.rocket.common.util.PlatformLogger
 import chat.rocket.core.RocketChatClient
 import chat.rocket.core.TokenRepository
 import io.fabric8.mockwebserver.DefaultMockServer
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -18,7 +18,7 @@ import org.hamcrest.CoreMatchers.`is` as isEqualTo
 class CustomEmojiTest {
 
     private val EMOJI_CUSTOM_OK =
-        """
+            """
 {
   "emojis": [
     {
@@ -412,10 +412,10 @@ class CustomEmojiTest {
     @Test
     fun `getCustomEmojis() should return list of custom emojis`() {
         mockServer.expect()
-            .get()
-            .withPath("/api/v1/emoji-custom")
-            .andReturn(200, EMOJI_CUSTOM_OK)
-            .once()
+                .get()
+                .withPath("/api/v1/emoji-custom")
+                .andReturn(200, EMOJI_CUSTOM_OK)
+                .once()
 
         runBlocking {
             val customEmojis = sut.getCustomEmojis()

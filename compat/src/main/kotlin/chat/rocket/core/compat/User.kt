@@ -2,9 +2,10 @@ package chat.rocket.core.compat
 
 import chat.rocket.core.RocketChatClient
 import chat.rocket.core.compat.internal.callback
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.internal.rest.me
 import chat.rocket.core.model.Myself
-import kotlinx.coroutines.experimental.CommonPool
+
 
 /**
  * Returns the current logged user information, useful to check if the Token from TokenProvider

@@ -3,19 +3,20 @@ package chat.rocket.core.internal.rest
 import chat.rocket.common.model.ServerInfo
 import chat.rocket.common.model.SettingsOauth
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.CommonPool
 import chat.rocket.core.internal.model.ConfigurationsPayload
 import chat.rocket.core.internal.model.ServerInfoResponse
 import chat.rocket.core.model.Value
 import com.squareup.moshi.Types
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
+
+import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
 
 suspend fun RocketChatClient.serverInfo(): ServerInfo = withContext(CommonPool) {
     val url = restUrl.newBuilder()
-        .addPathSegment("api")
-        .addPathSegment("info")
-        .build()
+            .addPathSegment("api")
+            .addPathSegment("info")
+            .build()
 
     val request = requestBuilder(url).get().build()
 
@@ -33,8 +34,8 @@ private fun HttpUrl.baseUrl(): HttpUrl {
     val api = segments.indexOf("api")
 
     return newBuilder().removePathSegment(info)
-        .removePathSegment(api)
-        .build()
+            .removePathSegment(api)
+            .build()
 }
 
 suspend fun RocketChatClient.configurations(): Map<String, Map<String, String>> = withContext(CommonPool) {
@@ -47,8 +48,8 @@ suspend fun RocketChatClient.configurations(): Map<String, Map<String, String>> 
     val request = requestBuilder(url).get().build()
 
     val payload = handleRestCall<ConfigurationsPayload>(
-        request,
-        ConfigurationsPayload::class.java
+            request,
+            ConfigurationsPayload::class.java
     )
 
     val result = HashMap<String, Map<String, String>>()
@@ -73,10 +74,10 @@ suspend fun RocketChatClient.configurations(): Map<String, Map<String, String>> 
  */
 suspend fun RocketChatClient.settingsOauth(): SettingsOauth = withContext(CommonPool) {
     val url = restUrl.newBuilder()
-        .addPathSegment("api")
-        .addPathSegment("v1")
-        .addPathSegment("settings.oauth")
-        .build()
+            .addPathSegment("api")
+            .addPathSegment("v1")
+            .addPathSegment("settings.oauth")
+            .build()
 
     val request = requestBuilder(url).get().build()
 
@@ -100,8 +101,8 @@ suspend fun RocketChatClient.settings(vararg filter: String): Map<String, Value<
     val request = requestBuilder(url).get().build()
 
     val type = Types.newParameterizedType(
-        Map::class.java, String::class.java,
-        Types.newParameterizedType(Value::class.java, Any::class.java)
+            Map::class.java, String::class.java,
+            Types.newParameterizedType(Value::class.java, Any::class.java)
     )
     handleRestCall<Map<String, Value<Any>>>(request, type)
 }

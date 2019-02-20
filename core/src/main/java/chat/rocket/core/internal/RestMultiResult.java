@@ -4,16 +4,14 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.Moshi;
-
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Set;
-
-import javax.annotation.Nullable;
 
 public class RestMultiResult<T1, T2> {
     private T1 update;
@@ -24,7 +22,7 @@ public class RestMultiResult<T1, T2> {
         this.remove = remove;
     }
 
-    public T1 getUpdate(){
+    public T1 getUpdate() {
         return update;
     }
 
@@ -45,7 +43,7 @@ public class RestMultiResult<T1, T2> {
     }
 
     public static class MoshiJsonAdapter<T1, T2> extends JsonAdapter<RestMultiResult<T1, T2>> {
-        private static final String[] NAMES = new String[] {"update", "remove"};
+        private static final String[] NAMES = new String[]{"update", "remove"};
         private static final JsonReader.Options OPTIONS = JsonReader.Options.of(NAMES);
         private final JsonAdapter<T1> t1Adaptper;
         private final JsonAdapter<T2> t2Adaptper;

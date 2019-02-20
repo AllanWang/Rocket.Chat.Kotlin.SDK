@@ -12,19 +12,19 @@ import chat.rocket.common.model.UserStatus
  */
 
 private fun newMessage(method: String, id: String, params: String): String =
-    "{\"msg\":\"method\",\"id\":\"$id\",\"method\":\"$method\",\"params\":[$params]}"
+        "{\"msg\":\"method\",\"id\":\"$id\",\"method\":\"$method\",\"params\":[$params]}"
 
 internal fun loginMethod(id: String, token: String): String =
-    newMessage("login", id, "{\"resume\":\"$token\"}")
+        newMessage("login", id, "{\"resume\":\"$token\"}")
 
 internal fun defaultStatusMessage(id: String, status: UserStatus): String =
-    newMessage("UserPresence:setDefaultStatus", id, "\"$status\"")
+        newMessage("UserPresence:setDefaultStatus", id, "\"$status\"")
 
 internal fun temporaryStatusMessage(id: String, status: UserStatus): String =
-    newMessage("UserPresence:$status", id, "")
+        newMessage("UserPresence:$status", id, "")
 
 internal fun typingMessage(id: String, roomId: String, username: String, isTyping: Boolean) =
-    newMessage("stream-notify-room", id, "\"$roomId/typing\",\"$username\",$isTyping")
+        newMessage("stream-notify-room", id, "\"$roomId/typing\",\"$username\",$isTyping")
 
 internal fun createDirectMessage(id: String, username: String): String {
     return newMessage("createDirectMessage", id, "\"$username\"")

@@ -1,7 +1,7 @@
 package chat.rocket.core.internal.realtime.socket.message.collection
 
+import chat.rocket.core.internal.launch
 import chat.rocket.core.internal.realtime.socket.Socket
-import kotlinx.coroutines.experimental.launch
 import org.json.JSONObject
 
 internal const val STREAM_NOTIFY_ROOM = "stream-notify-room"

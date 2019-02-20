@@ -2,6 +2,8 @@ package chat.rocket.core.internal.realtime.socket
 
 import chat.rocket.common.model.User
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.delay
+import chat.rocket.core.internal.launch
 import chat.rocket.core.internal.model.Subscription
 import chat.rocket.core.internal.realtime.message.CONNECT_MESSAGE
 import chat.rocket.core.internal.realtime.message.pingMessage
@@ -15,22 +17,21 @@ import chat.rocket.core.model.Message
 import chat.rocket.core.model.Myself
 import chat.rocket.core.model.Room
 import com.squareup.moshi.JsonAdapter
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.channels.Channel
-import kotlinx.coroutines.experimental.channels.SendChannel
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.isActive
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.newSingleThreadContext
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.coroutines.experimental.coroutineContext
 
 const val PING_INTERVAL = 15L
 
@@ -45,12 +46,12 @@ class Socket(
 ) : WebSocketListener() {
 
     private val request: Request = Request.Builder()
-        .url("${client.url}/websocket")
-        .addHeader("Accept-Encoding", "gzip, deflate, sdch")
-        .addHeader("Accept-Language", "en-US,en;q=0.8")
-        .addHeader("Pragma", "no-cache")
-        .header("User-Agent", client.agent)
-        .build()
+            .url("${client.url}/websocket")
+            .addHeader("Accept-Encoding", "gzip, deflate, sdch")
+            .addHeader("Accept-Language", "en-US,en;q=0.8")
+            .addHeader("Pragma", "no-cache")
+            .header("User-Agent", client.agent)
+            .build()
 
     private val httpClient = client.httpClient
     internal val logger = client.logger
@@ -67,8 +68,9 @@ class Socket(
     private val currentId = AtomicInteger(1)
 
     internal val subscriptionsMap = HashMap<String, (Boolean, String) -> Unit>()
-
-    private val connectionContext = newSingleThreadContext("connection-context")
+    private val connectionContext = Executors.newSingleThreadExecutor {
+        Thread("connection-context")
+    }.asCoroutineDispatcher()
     private val reconnectionStrategy = ReconnectionStrategy()
     private var reconnectJob: Job? = null
     private var selfDisconnect = false
@@ -214,7 +216,7 @@ class Socket(
                 // FIXME - for now just set the state to connected
                 setState(State.Connected())
 
-                //Also process the message
+                // Also process the message
                 if (message.type == MessageType.ADDED) {
                     processSubscriptionsAdded(message, text)
                 }

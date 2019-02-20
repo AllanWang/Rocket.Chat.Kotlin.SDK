@@ -1,8 +1,9 @@
 package chat.rocket.core.internal.rest
 
 import chat.rocket.core.RocketChatClient
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
+import chat.rocket.core.internal.CommonPool
+
+import kotlinx.coroutines.withContext
 
 /**
  * Logout user from the current logged-in server.

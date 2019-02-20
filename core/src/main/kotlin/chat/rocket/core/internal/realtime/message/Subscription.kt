@@ -10,25 +10,25 @@ package chat.rocket.core.internal.realtime.message
  */
 
 private fun newSubscriptionMessage(name: String, id: String, params: String): String =
-    "{\"msg\":\"sub\",\"id\":\"$id\",\"name\":\"$name\",\"params\":[$params]}"
+        "{\"msg\":\"sub\",\"id\":\"$id\",\"name\":\"$name\",\"params\":[$params]}"
 
 internal fun unsubscribeMessage(id: String): String =
-    "{\"msg\":\"unsub\", \"id\":\"$id\"}"
+        "{\"msg\":\"unsub\", \"id\":\"$id\"}"
 
 internal fun subscriptionsStreamMessage(id: String, userId: String): String =
-    newSubscriptionMessage("stream-notify-user", id, "\"$userId/subscriptions-changed\", false")
+        newSubscriptionMessage("stream-notify-user", id, "\"$userId/subscriptions-changed\", false")
 
 internal fun roomsStreamMessage(id: String, userId: String): String =
-    newSubscriptionMessage("stream-notify-user", id, "\"$userId/rooms-changed\", false")
+        newSubscriptionMessage("stream-notify-user", id, "\"$userId/rooms-changed\", false")
 
 internal fun streamRoomMessages(id: String, roomId: String): String =
-    newSubscriptionMessage("stream-room-messages", id, "\"$roomId\", false")
+        newSubscriptionMessage("stream-room-messages", id, "\"$roomId\", false")
 
 internal fun userDataChangesMessage(id: String): String =
-    newSubscriptionMessage("userData", id, "")
+        newSubscriptionMessage("userData", id, "")
 
 internal fun activeUsersMessage(id: String): String =
-    newSubscriptionMessage("activeUsers", id, "")
+        newSubscriptionMessage("activeUsers", id, "")
 
 internal fun streamTypingMessage(id: String, roomId: String): String =
-    newSubscriptionMessage("stream-notify-room", id, "\"$roomId/typing\", false")
+        newSubscriptionMessage("stream-notify-room", id, "\"$roomId/typing\", false")

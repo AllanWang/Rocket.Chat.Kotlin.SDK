@@ -1,9 +1,9 @@
 package chat.rocket.core.model.url
 
-import com.squareup.moshi.Moshi
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
+import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import se.ansman.kotshi.JsonSerializable
 
@@ -66,7 +66,7 @@ class MetaJsonAdapter(moshi: Moshi) : JsonAdapter<Meta>() {
     }
 
     override fun toJson(writer: JsonWriter, value: Meta?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {
