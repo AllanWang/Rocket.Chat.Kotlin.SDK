@@ -34,23 +34,23 @@ internal fun getRestApiMethodNameByRoomType(roomType: RoomType, method: String):
         is RoomType.Channel -> "channels.$method"
         is RoomType.PrivateGroup -> "groups.$method"
         is RoomType.DirectMessage -> "im.$method"
-    // TODO - handle custom rooms
+        // TODO - handle custom rooms
         else -> "channels.$method"
     }
 }
 
 internal fun requestUrl(baseUrl: HttpUrl, method: String): HttpUrl.Builder {
     return baseUrl.newBuilder()
-        .addPathSegment("api")
-        .addPathSegment("v1")
-        .addPathSegment(method)
+            .addPathSegment("api")
+            .addPathSegment("v1")
+            .addPathSegment(method)
 }
 
 internal fun RocketChatClient.requestBuilder(httpUrl: HttpUrl): Request.Builder =
-    Request.Builder()
-        .url(httpUrl)
-        .header("User-Agent", agent)
-        .tag(Any())
+        Request.Builder()
+                .url(httpUrl)
+                .header("User-Agent", agent)
+                .tag(Any())
 
 internal fun RocketChatClient.requestBuilderForAuthenticatedMethods(httpUrl: HttpUrl): Request.Builder {
     val builder = requestBuilder(httpUrl)
@@ -71,7 +71,8 @@ internal fun <T> RocketChatClient.handleResponse(response: Response, type: Type)
         val source = response.body()?.source()
         checkNotNull(source) { "Missing body" }
 
-        return adapter.fromJson(source) ?: throw RocketChatInvalidResponseException("Error parsing JSON message", url = url.toString())
+        return adapter.fromJson(source)
+                ?: throw RocketChatInvalidResponseException("Error parsing JSON message", url = url.toString())
     } catch (ex: Exception) {
         when (ex) {
             is RocketChatException -> throw ex // already a RocketChatException, just rethrow it.
@@ -173,8 +174,8 @@ internal fun processCallbackError(
                 val adapter: JsonAdapter<ErrorMessage>? = moshi.adapter(ErrorMessage::class.java)
                 val message = adapter?.fromJson(body)
                 RocketChatApiException(message?.errorType ?: response.code().toString(), message?.error
-                    ?: "unknown error",
-                    url = request.url().toString())
+                        ?: "unknown error",
+                        url = request.url().toString())
             }
         }
     } catch (e: Exception) {

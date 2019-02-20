@@ -35,7 +35,8 @@ class UserTest {
 
     private val authToken = Token("userId", "authToken")
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     val temporaryFolder = TemporaryFolder()
 
     @Before
@@ -221,10 +222,10 @@ class UserTest {
     @Test
     fun `deleteOwnAccount() should succeed with valid parameters`() {
         mockServer.expect()
-            .post()
-            .withPath("/api/v1/users.deleteOwnAccount")
-            .andReturn(200, SUCCESS)
-            .once()
+                .post()
+                .withPath("/api/v1/users.deleteOwnAccount")
+                .andReturn(200, SUCCESS)
+                .once()
 
         runBlocking {
             val result = sut.deleteOwnAccount("password")
@@ -235,10 +236,10 @@ class UserTest {
     @Test(expected = RocketChatException::class)
     fun `deleteOwnAccount() should fail with RocketChatAuthException if not logged in`() {
         mockServer.expect()
-            .post()
-            .withPath("/api/v1/users.deleteOwnAccount")
-            .andReturn(401, MUST_BE_LOGGED_ERROR)
-            .once()
+                .post()
+                .withPath("/api/v1/users.deleteOwnAccount")
+                .andReturn(401, MUST_BE_LOGGED_ERROR)
+                .once()
 
         runBlocking {
             sut.deleteOwnAccount("password")

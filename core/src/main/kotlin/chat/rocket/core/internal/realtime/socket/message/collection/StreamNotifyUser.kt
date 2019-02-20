@@ -6,7 +6,6 @@ import chat.rocket.core.internal.realtime.socket.Socket
 import chat.rocket.core.internal.realtime.socket.model.StreamMessage
 import chat.rocket.core.internal.realtime.socket.model.Type
 import chat.rocket.core.model.Room
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.security.InvalidParameterException
 

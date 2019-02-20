@@ -80,10 +80,10 @@ class RolesTest {
     @Test
     fun `chatRoomRoles() should return correct result for groups`() {
         mockServer.expect()
-            .get()
-            .withPath("/api/v1/groups.roles?roomName=private-general")
-            .andReturn(200, ROLES_OK)
-            .once()
+                .get()
+                .withPath("/api/v1/groups.roles?roomName=private-general")
+                .andReturn(200, ROLES_OK)
+                .once()
 
         runBlocking {
             val chatRoomRoles = sut.chatRoomRoles(roomType = RoomType.PrivateGroup(), roomName = "private-general")
@@ -123,10 +123,10 @@ class RolesTest {
     @Test
     fun `chatRoomRoles() should return correct result for channels`() {
         mockServer.expect()
-            .get()
-            .withPath("/api/v1/channels.roles?roomName=general")
-            .andReturn(200, ROLES_OK)
-            .once()
+                .get()
+                .withPath("/api/v1/channels.roles?roomName=general")
+                .andReturn(200, ROLES_OK)
+                .once()
 
         runBlocking {
             val chatRoomRoles = sut.chatRoomRoles(roomType = RoomType.Channel(), roomName = "general")

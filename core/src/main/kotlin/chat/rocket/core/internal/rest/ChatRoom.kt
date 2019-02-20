@@ -5,22 +5,22 @@ import chat.rocket.common.model.RoomType
 import chat.rocket.common.model.User
 import chat.rocket.core.RocketChatClient
 import chat.rocket.core.internal.CommonPool
+import chat.rocket.core.internal.RestResult
 import chat.rocket.core.internal.model.ChatRoomAnnouncementPayload
 import chat.rocket.core.internal.model.ChatRoomDescriptionPayload
+import chat.rocket.core.internal.model.ChatRoomFavoritePayload
 import chat.rocket.core.internal.model.ChatRoomJoinCodePayload
 import chat.rocket.core.internal.model.ChatRoomNamePayload
 import chat.rocket.core.internal.model.ChatRoomPayload
 import chat.rocket.core.internal.model.ChatRoomReadOnlyPayload
-import chat.rocket.core.internal.model.ChatRoomUnreadPayload
 import chat.rocket.core.internal.model.ChatRoomTopicPayload
 import chat.rocket.core.internal.model.ChatRoomTypePayload
-import chat.rocket.core.internal.model.ChatRoomFavoritePayload
-import chat.rocket.core.internal.RestResult
+import chat.rocket.core.internal.model.ChatRoomUnreadPayload
 import chat.rocket.core.internal.model.RoomIdPayload
 import chat.rocket.core.model.ChatRoomRole
 import chat.rocket.core.model.Message
-import chat.rocket.core.model.Room
 import chat.rocket.core.model.PagedResult
+import chat.rocket.core.model.Room
 import chat.rocket.core.model.attachment.GenericAttachment
 import com.squareup.moshi.Types
 import kotlinx.coroutines.withContext
@@ -42,16 +42,16 @@ suspend fun RocketChatClient.getMembers(
     count: Long
 ): PagedResult<List<User>> = withContext(CommonPool) {
     val httpUrl = requestUrl(restUrl, getRestApiMethodNameByRoomType(roomType, "members"))
-        .addQueryParameter("roomId", roomId)
-        .addQueryParameter("offset", offset.toString())
-        .addQueryParameter("count", count.toString())
-        .build()
+            .addQueryParameter("roomId", roomId)
+            .addQueryParameter("offset", offset.toString())
+            .addQueryParameter("count", count.toString())
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, User::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, User::class.java)
     )
 
     val result = handleRestCall<RestResult<List<User>>>(request, type)
@@ -72,17 +72,17 @@ suspend fun RocketChatClient.getMentions(
     count: Long
 ): PagedResult<List<Message>> = withContext(CommonPool) {
     val httpUrl = requestUrl(restUrl, "channels.getAllUserMentionsByChannel")
-        .addQueryParameter("roomId", roomId)
-        .addQueryParameter("offset", offset.toString())
-        .addQueryParameter("count", count.toString())
-        .addQueryParameter("sort", "{\"ts\":-1}")
-        .build()
+            .addQueryParameter("roomId", roomId)
+            .addQueryParameter("offset", offset.toString())
+            .addQueryParameter("count", count.toString())
+            .addQueryParameter("sort", "{\"ts\":-1}")
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, Message::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, Message::class.java)
     )
 
     val result = handleRestCall<RestResult<List<Message>>>(request, type)
@@ -105,16 +105,16 @@ suspend fun RocketChatClient.getFavoriteMessages(
     val userId = tokenRepository.get(this@getFavoriteMessages.url)?.userId
 
     val httpUrl = requestUrl(restUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
-        .addQueryParameter("roomId", roomId)
-        .addQueryParameter("offset", offset.toString())
-        .addQueryParameter("query", "{\"starred._id\":{\"\$in\":[\"$userId\"]}}")
-        .build()
+            .addQueryParameter("roomId", roomId)
+            .addQueryParameter("offset", offset.toString())
+            .addQueryParameter("query", "{\"starred._id\":{\"\$in\":[\"$userId\"]}}")
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, Message::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, Message::class.java)
     )
 
     val result = handleRestCall<RestResult<List<Message>>>(request, type)
@@ -135,19 +135,19 @@ suspend fun RocketChatClient.getPinnedMessages(
     offset: Int? = 0
 ): PagedResult<List<Message>> = withContext(CommonPool) {
     val httpUrl = requestUrl(
-        restUrl,
-        getRestApiMethodNameByRoomType(roomType, "messages")
+            restUrl,
+            getRestApiMethodNameByRoomType(roomType, "messages")
     )
-        .addQueryParameter("roomId", roomId)
-        .addQueryParameter("offset", offset.toString())
-        .addQueryParameter("query", "{\"pinned\":true}")
-        .build()
+            .addQueryParameter("roomId", roomId)
+            .addQueryParameter("offset", offset.toString())
+            .addQueryParameter("query", "{\"pinned\":true}")
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, Message::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, Message::class.java)
     )
 
     val result = handleRestCall<RestResult<List<Message>>>(request, type)
@@ -169,19 +169,19 @@ suspend fun RocketChatClient.getFiles(
     offset: Int? = 0
 ): PagedResult<List<GenericAttachment>> = withContext(CommonPool) {
     val httpUrl = requestUrl(
-        restUrl,
-        getRestApiMethodNameByRoomType(roomType, "files")
+            restUrl,
+            getRestApiMethodNameByRoomType(roomType, "files")
     )
-        .addQueryParameter("roomId", roomId)
-        .addQueryParameter("offset", offset.toString())
-        .addQueryParameter("sort", "{\"uploadedAt\":-1}")
-        .build()
+            .addQueryParameter("roomId", roomId)
+            .addQueryParameter("offset", offset.toString())
+            .addQueryParameter("sort", "{\"uploadedAt\":-1}")
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, GenericAttachment::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, GenericAttachment::class.java)
     )
 
     val result = handleRestCall<RestResult<List<GenericAttachment>>>(request, type)
@@ -575,15 +575,15 @@ suspend fun RocketChatClient.searchMessages(
     searchText: String
 ): PagedResult<List<Message>> = withContext(CommonPool) {
     val httpUrl = requestUrl(restUrl, "chat.search")
-        .addQueryParameter("roomId", roomId)
-        .addQueryParameter("searchText", searchText)
-        .build()
+            .addQueryParameter("roomId", roomId)
+            .addQueryParameter("searchText", searchText)
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, Message::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, Message::class.java)
     )
 
     val result = handleRestCall<RestResult<List<Message>>>(request, type)
@@ -604,14 +604,14 @@ suspend fun RocketChatClient.chatRoomRoles(
 ): List<ChatRoomRole> = withContext(CommonPool) {
 
     val httpUrl = requestUrl(restUrl, getRestApiMethodNameByRoomType(roomType, "roles"))
-        .addQueryParameter("roomName", roomName)
-        .build()
+            .addQueryParameter("roomName", roomName)
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, ChatRoomRole::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, ChatRoomRole::class.java)
     )
     return@withContext handleRestCall<RestResult<List<ChatRoomRole>>>(request, type).result()
 }

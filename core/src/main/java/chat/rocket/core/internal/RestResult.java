@@ -4,22 +4,23 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.Moshi;
-
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
 public class RestResult<T> {
     private T _result;
-    @Nullable private Long total = null;
-    @Nullable private Long offset = null;
-    @Nullable private Long count = null;
+    @Nullable
+    private Long total = null;
+    @Nullable
+    private Long offset = null;
+    @Nullable
+    private Long count = null;
 
     private RestResult(T data, @Nullable Long total, @Nullable Long offset, @Nullable Long count) {
         this._result = data;
@@ -28,7 +29,7 @@ public class RestResult<T> {
         this.count = count;
     }
 
-    public T result(){
+    public T result() {
         return _result;
     }
 
@@ -41,6 +42,7 @@ public class RestResult<T> {
     public Long offset() {
         return offset;
     }
+
     @Nullable
     public Long count() {
         return count;
@@ -51,7 +53,7 @@ public class RestResult<T> {
     }
 
     public static class MoshiJsonAdapter<T> extends JsonAdapter<RestResult<T>> {
-        private static final String[] NAMES = new String[] {"status", "success", "total",
+        private static final String[] NAMES = new String[]{"status", "success", "total",
                 "offset", "count"};
         private static final JsonReader.Options OPTIONS = JsonReader.Options.of(NAMES);
         private final JsonAdapter<T> tAdaptper;

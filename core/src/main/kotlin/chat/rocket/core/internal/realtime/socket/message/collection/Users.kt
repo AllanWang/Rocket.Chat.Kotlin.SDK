@@ -4,7 +4,6 @@ import chat.rocket.common.model.User
 import chat.rocket.core.internal.launch
 import chat.rocket.core.internal.realtime.socket.Socket
 import chat.rocket.core.model.Myself
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 internal const val USERS = "users"

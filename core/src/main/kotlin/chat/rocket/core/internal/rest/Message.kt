@@ -48,7 +48,7 @@ suspend fun RocketChatClient.sendMessage(
     attachments: List<Attachment>? = null
 ): Message = withContext(CommonPool) {
     val payload = SendMessagePayload(
-        SendMessageBody(messageId, roomId, message, alias, emoji, avatar, attachments)
+            SendMessageBody(messageId, roomId, message, alias, emoji, avatar, attachments)
     )
     val adapter = moshi.adapter(SendMessagePayload::class.java)
     val payloadBody = adapter.toJson(payload)
@@ -103,20 +103,20 @@ suspend fun RocketChatClient.postMessage(
  * @return The updated Message object.
  */
 suspend fun RocketChatClient.updateMessage(roomId: String, messageId: String, text: String): Message =
-    withContext(CommonPool) {
-        val payload = PostMessagePayload(roomId, text, null, null, null, null, messageId)
-        val adapter = moshi.adapter(PostMessagePayload::class.java)
-        val payloadBody = adapter.toJson(payload)
+        withContext(CommonPool) {
+            val payload = PostMessagePayload(roomId, text, null, null, null, null, messageId)
+            val adapter = moshi.adapter(PostMessagePayload::class.java)
+            val payloadBody = adapter.toJson(payload)
 
-        val body = RequestBody.create(MEDIA_TYPE_JSON, payloadBody)
+            val body = RequestBody.create(MEDIA_TYPE_JSON, payloadBody)
 
-        val url = requestUrl(restUrl, "chat.update").build()
-        val request = requestBuilderForAuthenticatedMethods(url).post(body).build()
+            val url = requestUrl(restUrl, "chat.update").build()
+            val request = requestBuilderForAuthenticatedMethods(url).post(body).build()
 
-        val type = Types.newParameterizedType(RestResult::class.java, Message::class.java)
+            val type = Types.newParameterizedType(RestResult::class.java, Message::class.java)
 
-        return@withContext handleRestCall<RestResult<Message>>(request, type).result()
-    }
+            return@withContext handleRestCall<RestResult<Message>>(request, type).result()
+        }
 
 /**
  * Deletes a message.
@@ -248,14 +248,14 @@ suspend fun RocketChatClient.uploadFile(
 ) {
     withContext(CommonPool) {
         val body = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart(
-                "file", file.name,
-                RequestBody.create(MediaType.parse(mimeType), file)
-            )
-            .addFormDataPart("msg", msg)
-            .addFormDataPart("description", description)
-            .build()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                        "file", file.name,
+                        RequestBody.create(MediaType.parse(mimeType), file)
+                )
+                .addFormDataPart("msg", msg)
+                .addFormDataPart("description", description)
+                .build()
 
         uploadFile(roomId, body)
     }
@@ -271,14 +271,14 @@ suspend fun RocketChatClient.uploadFile(
 ) {
     withContext(CommonPool) {
         val body = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart(
-                "file", fileName,
-                InputStreamRequestBody(MediaType.parse(mimeType), inputStreamProvider)
-            )
-            .addFormDataPart("msg", msg)
-            .addFormDataPart("description", description)
-            .build()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                        "file", fileName,
+                        InputStreamRequestBody(MediaType.parse(mimeType), inputStreamProvider)
+                )
+                .addFormDataPart("msg", msg)
+                .addFormDataPart("description", description)
+                .build()
 
         uploadFile(roomId, body)
     }
@@ -286,8 +286,8 @@ suspend fun RocketChatClient.uploadFile(
 
 private suspend fun RocketChatClient.uploadFile(roomId: String, body: RequestBody) {
     val httpUrl = requestUrl(restUrl, "rooms.upload")
-        .addPathSegment(roomId)
-        .build()
+            .addPathSegment(roomId)
+            .build()
     val request = requestBuilderForAuthenticatedMethods(httpUrl).post(body).build()
 
     handleRestCall<Any>(request, Any::class.java, largeFile = true)
@@ -300,19 +300,19 @@ suspend fun RocketChatClient.messages(
     count: Long
 ): PagedResult<List<Message>> = withContext(CommonPool) {
     val httpUrl = requestUrl(
-        restUrl,
-        getRestApiMethodNameByRoomType(roomType, "messages")
+            restUrl,
+            getRestApiMethodNameByRoomType(roomType, "messages")
     )
-        .addQueryParameter("roomId", roomId)
-        .addQueryParameter("offset", offset.toString())
-        .addQueryParameter("count", count.toString())
-        .build()
+            .addQueryParameter("roomId", roomId)
+            .addQueryParameter("offset", offset.toString())
+            .addQueryParameter("count", count.toString())
+            .build()
 
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, Message::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, Message::class.java)
     )
     val result = handleRestCall<RestResult<List<Message>>>(request, type)
 
@@ -340,8 +340,8 @@ suspend fun RocketChatClient.history(
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, Message::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, Message::class.java)
     )
     val result = handleRestCall<RestResult<List<Message>>>(request, type)
 
@@ -368,8 +368,8 @@ suspend fun RocketChatClient.getMessageReadReceipts(
     val request = requestBuilderForAuthenticatedMethods(httpUrl).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, ReadReceipt::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, ReadReceipt::class.java)
     )
     val result = handleRestCall<RestResult<List<ReadReceipt>>>(request, type)
 

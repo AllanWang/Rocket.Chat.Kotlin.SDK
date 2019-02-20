@@ -46,17 +46,17 @@ suspend fun RocketChatClient.createChannel(
  * @return A DirectMessage object.
  */
 suspend fun RocketChatClient.createDirectMessage(username: String): DirectMessage =
-    withContext(CommonPool) {
-        val payload = CreateDirectMessagePayload(username = username)
-        val adapter = moshi.adapter(CreateDirectMessagePayload::class.java)
-        val payloadBody = adapter.toJson(payload)
+        withContext(CommonPool) {
+            val payload = CreateDirectMessagePayload(username = username)
+            val adapter = moshi.adapter(CreateDirectMessagePayload::class.java)
+            val payloadBody = adapter.toJson(payload)
 
-        val body = RequestBody.create(MEDIA_TYPE_JSON, payloadBody)
+            val body = RequestBody.create(MEDIA_TYPE_JSON, payloadBody)
 
-        val url = requestUrl(restUrl, "im.create").build()
-        val request = requestBuilderForAuthenticatedMethods(url).post(body).build()
+            val url = requestUrl(restUrl, "im.create").build()
+            val request = requestBuilderForAuthenticatedMethods(url).post(body).build()
 
-        val type = Types.newParameterizedType(RestResult::class.java, DirectMessage::class.java)
+            val type = Types.newParameterizedType(RestResult::class.java, DirectMessage::class.java)
 
-        return@withContext handleRestCall<RestResult<DirectMessage>>(request, type).result()
-    }
+            return@withContext handleRestCall<RestResult<DirectMessage>>(request, type).result()
+        }

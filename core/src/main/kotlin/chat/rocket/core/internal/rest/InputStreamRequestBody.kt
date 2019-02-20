@@ -1,10 +1,10 @@
 package chat.rocket.core.internal.rest
 
-import okio.Okio
-import java.io.IOException
-import okio.BufferedSink
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import okio.BufferedSink
+import okio.Okio
+import java.io.IOException
 import java.io.InputStream
 
 class InputStreamRequestBody(

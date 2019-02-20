@@ -3,7 +3,6 @@ package chat.rocket.core.internal.realtime.socket.message.collection
 import chat.rocket.core.internal.launch
 import chat.rocket.core.internal.realtime.socket.Socket
 import chat.rocket.core.model.Message
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 internal const val STREAM_ROOM_MESSAGES = "stream-room-messages"

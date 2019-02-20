@@ -37,9 +37,15 @@ data class Attachment(
 
 @FallbackSealedClass(name = "Custom", fieldName = "colorValue")
 sealed class Color(val color: Int, val rawColor: String) {
-    @Json(name = "good") class Good : Color(parseColor("#35AC19"), "#35AC19")
-    @Json(name = "warning") class Warning : Color(parseColor("#FCB316"), "#FCB316")
-    @Json(name = "danger") class Danger : Color(parseColor("#D30230"), "#D30230")
+    @Json(name = "good")
+    class Good : Color(parseColor("#35AC19"), "#35AC19")
+
+    @Json(name = "warning")
+    class Warning : Color(parseColor("#FCB316"), "#FCB316")
+
+    @Json(name = "danger")
+    class Danger : Color(parseColor("#D30230"), "#D30230")
+
     class Custom(private val colorValue: String) : Color(parseColor(colorValue), colorValue)
 
     override fun toString(): String {

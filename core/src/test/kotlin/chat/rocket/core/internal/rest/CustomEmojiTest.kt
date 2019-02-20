@@ -18,7 +18,7 @@ import org.hamcrest.CoreMatchers.`is` as isEqualTo
 class CustomEmojiTest {
 
     private val EMOJI_CUSTOM_OK =
-        """
+            """
 {
   "emojis": [
     {
@@ -412,10 +412,10 @@ class CustomEmojiTest {
     @Test
     fun `getCustomEmojis() should return list of custom emojis`() {
         mockServer.expect()
-            .get()
-            .withPath("/api/v1/emoji-custom")
-            .andReturn(200, EMOJI_CUSTOM_OK)
-            .once()
+                .get()
+                .withPath("/api/v1/emoji-custom")
+                .andReturn(200, EMOJI_CUSTOM_OK)
+                .once()
 
         runBlocking {
             val customEmojis = sut.getCustomEmojis()

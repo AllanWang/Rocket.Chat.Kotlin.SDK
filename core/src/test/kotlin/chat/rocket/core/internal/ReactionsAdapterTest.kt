@@ -35,6 +35,7 @@ const val REACTIONS = """
 """
 
 val REACTIONS_EMPTY = "[]"
+
 class ReactionsAdapterTest {
     lateinit var moshi: Moshi
 

@@ -1,6 +1,15 @@
 package chat.rocket.core.internal
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -14,7 +23,9 @@ fun <T> async(
 
 fun launch(
     context: CoroutineContext = EmptyCoroutineContext,
-    parent: CoroutineContext?,
+    parent: CoroutineContext? = null,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
 ): Job = GlobalScope.launch(context + (parent ?: EmptyCoroutineContext), start, block)
+
+suspend fun delay(timeout: Long, timeUnit: TimeUnit) = delay(timeUnit.toMillis(timeout))

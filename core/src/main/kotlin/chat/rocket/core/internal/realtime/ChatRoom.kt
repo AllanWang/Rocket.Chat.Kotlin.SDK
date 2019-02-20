@@ -12,9 +12,9 @@ import chat.rocket.core.internal.realtime.message.typingMessage
 import kotlinx.coroutines.withContext
 
 suspend fun RocketChatClient.setTypingStatus(roomId: String, username: String, isTyping: Boolean) =
-    withContext(CommonPool) {
-        socket.send(typingMessage(socket.generateId(), roomId, username, isTyping))
-    }
+        withContext(CommonPool) {
+            socket.send(typingMessage(socket.generateId(), roomId, username, isTyping))
+        }
 
 fun RocketChatClient.subscribeTypingStatus(roomId: String, callback: (Boolean, String) -> Unit): String {
     with(socket) {

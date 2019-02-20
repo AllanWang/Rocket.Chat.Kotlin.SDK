@@ -14,8 +14,8 @@ suspend fun RocketChatClient.getCustomEmojis(): List<CustomEmoji> = withContext(
     val request = requestBuilderForAuthenticatedMethods(url).get().build()
 
     val type = Types.newParameterizedType(
-        RestResult::class.java,
-        Types.newParameterizedType(List::class.java, CustomEmoji::class.java)
+            RestResult::class.java,
+            Types.newParameterizedType(List::class.java, CustomEmoji::class.java)
     )
     return@withContext handleRestCall<RestResult<List<CustomEmoji>>>(request, type).result()
 }

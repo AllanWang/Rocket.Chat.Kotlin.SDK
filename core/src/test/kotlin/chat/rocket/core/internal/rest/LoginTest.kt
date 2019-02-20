@@ -454,10 +454,10 @@ class LoginTest {
     @Test
     fun `loginWithOauth() should succeed with right credentials`() {
         mockServer.expect()
-            .post()
-            .withPath("/api/v1/login")
-            .andReturn(200, LOGIN_SUCCESS)
-            .once()
+                .post()
+                .withPath("/api/v1/login")
+                .andReturn(200, LOGIN_SUCCESS)
+                .once()
 
         runBlocking {
             val token = sut.loginWithOauth("12345678901234567", "12345678901234567")
@@ -475,10 +475,10 @@ class LoginTest {
     @Test
     fun `loginWithOauth() should fail with RocketChatAuthException on wrong credentials`() {
         mockServer.expect()
-            .post()
-            .withPath("/api/v1/login")
-            .andReturn(401, LOGIN_ERROR)
-            .once()
+                .post()
+                .withPath("/api/v1/login")
+                .andReturn(401, LOGIN_ERROR)
+                .once()
 
         runBlocking {
             try {
@@ -496,10 +496,10 @@ class LoginTest {
     @Test
     fun `loginWithOauth() should fail with RocketChatInvalidResponseException on invalid response`() {
         mockServer.expect()
-            .post()
-            .withPath("/api/v1/login")
-            .andReturn(200, "NOT A JSON")
-            .once()
+                .post()
+                .withPath("/api/v1/login")
+                .andReturn(200, "NOT A JSON")
+                .once()
 
         runBlocking {
             try {
@@ -591,10 +591,10 @@ class LoginTest {
     @Test
     fun `forgotPassword() should succeed with valid parameters`() {
         mockServer.expect()
-            .post()
-            .withPath("/api/v1/users.forgotPassword")
-            .andReturn(200, SUCCESS)
-            .once()
+                .post()
+                .withPath("/api/v1/users.forgotPassword")
+                .andReturn(200, SUCCESS)
+                .once()
 
         runBlocking {
             sut.forgotPassword("test@email.com")
@@ -604,10 +604,10 @@ class LoginTest {
     @Test(expected = RocketChatException::class)
     fun `forgotPassword() should fail with RocketChatApiException if the user was not found`() {
         mockServer.expect()
-            .post()
-            .withPath("/api/v1/users.forgotPassword")
-            .andReturn(403, USER_NOT_FOUND_ERROR)
-            .once()
+                .post()
+                .withPath("/api/v1/users.forgotPassword")
+                .andReturn(403, USER_NOT_FOUND_ERROR)
+                .once()
 
         runBlocking {
             sut.forgotPassword("test@email.com")

@@ -2,6 +2,8 @@ package chat.rocket.core.internal.realtime.socket
 
 import chat.rocket.common.model.User
 import chat.rocket.core.RocketChatClient
+import chat.rocket.core.internal.delay
+import chat.rocket.core.internal.launch
 import chat.rocket.core.internal.model.Subscription
 import chat.rocket.core.internal.realtime.message.CONNECT_MESSAGE
 import chat.rocket.core.internal.realtime.message.pingMessage
@@ -15,17 +17,21 @@ import chat.rocket.core.model.Message
 import chat.rocket.core.model.Myself
 import chat.rocket.core.model.Room
 import com.squareup.moshi.JsonAdapter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.coroutines.EmptyCoroutineContext
 
 const val PING_INTERVAL = 15L
 
@@ -120,7 +126,7 @@ class Socket(
 
         if (reconnectionStrategy.shouldRetry) {
             reconnectJob?.cancel()
-            reconnectJob = GlobalScope.launch(connectionContext) {
+            reconnectJob = launch(connectionContext) {
                 logger.debug {
                     "Reconnecting in: ${reconnectionStrategy.reconnectInterval}"
                 }
@@ -272,9 +278,9 @@ class Socket(
         timeoutJob?.cancel()
 
         pingJob?.cancel()
-        pingJob = GlobalScope.launch(parentJob ?: EmptyCoroutineContext) {
+        pingJob = launch(parent = parentJob) {
             logger.debug { "Scheduling ping" }
-            delay(PING_INTERVAL * 1000)
+            delay(PING_INTERVAL, TimeUnit.SECONDS)
 
             logger.debug { "running ping if active" }
             if (!isActive) return@launch
@@ -287,8 +293,8 @@ class Socket(
     private suspend fun schedulePingTimeout() {
         val timeout = (PING_INTERVAL * 1.5).toLong()
         logger.debug { "Scheduling ping timeout in $timeout" }
-        timeoutJob = GlobalScope.launch(parentJob ?: EmptyCoroutineContext) {
-            delay(timeout * 1000)
+        timeoutJob = launch(parent = parentJob) {
+            delay(timeout, TimeUnit.SECONDS)
 
             if (!isActive) return@launch
             when (currentState) {
@@ -313,7 +319,7 @@ class Socket(
     }
 
     private fun sendState(state: State) {
-        GlobalScope.launch(connectionContext) {
+        launch(connectionContext) {
             for (channel in statusChannelList) {
                 logger.debug { "Sending $state to $channel" }
                 channel.send(state)
@@ -331,7 +337,7 @@ class Socket(
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response?) {
-        readJob = GlobalScope.launch(parentJob ?: EmptyCoroutineContext) {
+        readJob = launch(parent = parentJob) {
             for (message in processingChannel!!) {
                 processIncomingMessage(message)
             }
@@ -361,7 +367,7 @@ class Socket(
             if (parentJob == null || !parentJob!!.isActive) {
                 logger.debug { "Parent job: $parentJob" }
             }
-            GlobalScope.launch(parentJob ?: EmptyCoroutineContext) {
+            launch(parent = parentJob) {
                 if (processingChannel == null || processingChannel?.isFull == true || processingChannel?.isClosedForSend == true) {
                     logger.debug { "processing channel is in trouble... $processingChannel - full ${processingChannel?.isFull} - closedForSend ${processingChannel?.isClosedForSend}" }
                 }
